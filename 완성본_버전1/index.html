@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>생명공학기술 탐험</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8EEF1; --card:#FFFFFF; --ink:#13243B; --muted:#5B6B80; --line:#D3DCE5; --soft:#F2F5F8;
+  --accent:#E35205;
+  --dna:#1F6FD6; --cell:#7445C0; --food:#2E8B57; --body:#0A8C86;
+  --sky:#CFE8F7; --grass:#9CCB8A; --soil:#C9A27A; --soil2:#B58C63; --bld:#F4F7FA; --bld2:#DCE5EE;
+  --ok:#1E8E5A; --bad:#C42D5A;
+  --font-title:"Black Han Sans","Noto Sans KR","Malgun Gothic",sans-serif;
+  --font-body:"IBM Plex Sans KR","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0E1826; --card:#162539; --ink:#E7EEF6; --muted:#9DB0C6; --line:#2A3C54; --soft:#1B2D44;
+    --accent:#FF7A3D;
+    --dna:#5CA0FF; --cell:#B08CFF; --food:#5FD08C; --body:#3FCFC8;
+    --sky:#1B3350; --grass:#2F5D3A; --soil:#5A4430; --soil2:#47351F; --bld:#22344D; --bld2:#2D435F;
+    --ok:#4BD18F; --bad:#FF7A9E;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.75;font-size:16px;overflow-x:hidden}
+button{font-family:inherit;color:inherit;cursor:pointer}
+a{color:var(--dna)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* 상단 바 */
+.bar{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .in{max-width:1100px;margin:0 auto;padding:8px 14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand small{display:block;font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.2}
+.brand b{font-family:var(--font-title);font-size:22px;font-weight:400;line-height:1.2}
+.brand b i{font-style:normal;color:var(--accent)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--soft);padding:6px 12px;border-radius:8px;font-size:14px;font-weight:500;display:flex;gap:6px;align-items:center}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.tab:hover{border-color:var(--accent)}
+.btn{border:1px solid var(--line);background:var(--soft);padding:6px 14px;border-radius:8px;font-size:14px;font-weight:500}
+.btn:hover{border-color:var(--accent)}
+
+main{max-width:1100px;margin:0 auto;padding:18px 14px 60px}
+section.view[hidden]{display:none}
+h1,h2,h3{line-height:1.35;margin:0}
+.view>h2{font-family:var(--font-title);font-weight:400;font-size:28px;margin:6px 0 4px}
+.lead{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+.card h3{font-size:18px;margin-bottom:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+
+/* 홈 풍경 */
+.scene{position:relative;aspect-ratio:16/9;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--sky)}
+.scene svg{position:absolute;inset:0;width:100%;height:100%}
+.pin{position:absolute;transform:translate(0,-50%);display:flex;align-items:center;gap:6px;border:2px solid var(--card);background:var(--ink);color:var(--card);border-radius:999px;padding:2px 10px 2px 3px;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.pin b{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--pc);color:#fff;font-family:var(--font-mono);font-size:12px;font-weight:500}
+.pin:hover{transform:translate(0,-50%) scale(1.06)}
+.pin[data-cat="dna"]{--pc:var(--dna)} .pin[data-cat="cell"]{--pc:var(--cell)} .pin[data-cat="food"]{--pc:var(--food)} .pin[data-cat="body"]{--pc:var(--body)}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0}
+.cat{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--cc);border-radius:12px;padding:10px 12px}
+.cat[data-cat="dna"]{--cc:var(--dna)} .cat[data-cat="cell"]{--cc:var(--cell)} .cat[data-cat="food"]{--cc:var(--food)} .cat[data-cat="body"]{--cc:var(--body)}
+.cat h3{font-size:15px;margin-bottom:6px}
+.cat button{display:flex;gap:8px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:5px 4px;border-radius:6px;font-size:14px}
+.cat button:hover{background:var(--soft)}
+.cat button b{font-family:var(--font-mono);font-size:12px;color:#fff;background:var(--cc);width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.links button{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left}
+.links button:hover{border-color:var(--accent)}
+.links b{display:block;font-size:15px}
+.links span{font-size:13px;color:var(--muted)}
+
+/* 서랍 */
+.veil{position:fixed;inset:0;background:rgba(5,12,22,.5);z-index:40}
+.veil[hidden]{display:none}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bg);z-index:50;overflow-y:auto;box-shadow:-8px 0 30px rgba(0,0,0,.3);transform:translateX(100%);transition:transform .25s}
+.drawer.open{transform:none}
+.drawer[hidden]{display:none}
+.dhead{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;z-index:2;display:flex;gap:10px;align-items:flex-start}
+.dhead .t{flex:1}
+.dhead .cat-tag{display:inline-block;font-size:12px;color:#fff;background:var(--cc);border-radius:999px;padding:0 10px}
+.dhead h2{font-size:22px;margin:4px 0 2px}
+.dhead p{margin:0;font-size:14px;color:var(--muted)}
+.x{border:1px solid var(--line);background:var(--soft);border-radius:8px;width:36px;height:36px;font-size:18px}
+.dbody{padding:12px 16px 40px}
+.dbody h4{margin:18px 0 6px;font-size:15px;color:var(--cc)}
+.chain{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:8px 0}
+.chain span{background:var(--cc);color:#fff;border-radius:999px;padding:1px 12px;font-size:13px}
+.chain i{font-style:normal;color:var(--muted)}
+.easy{background:#FFF4D6;border:1px solid #F0D68A;color:#4A3A00;border-radius:10px;padding:10px 14px;margin:10px 0}
+@media (prefers-color-scheme:dark){.easy{background:#3A3216;border-color:#6B5A1E;color:#F5E6B0}}
+.easy b{display:block;font-size:13px;margin-bottom:2px}
+.dia{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;margin:10px 0}
+.dia svg{display:block;width:100%;height:auto}
+.stepbtns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.stepbtns button{border:1px solid var(--line);background:var(--card);border-radius:8px;min-width:40px;padding:4px 10px;font-size:14px;font-weight:600}
+.stepbtns button[aria-pressed="true"]{background:var(--cc);color:#fff;border-color:var(--cc)}
+.stepinfo{background:var(--card);border-left:5px solid var(--cc);border-radius:0 10px 10px 0;padding:8px 14px;margin:8px 0}
+.stepinfo b{display:block}
+.ctrl{display:flex;gap:8px;margin:8px 0}
+.ctrl button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 14px;font-size:14px}
+.terms{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.terms div{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--line);font-size:14px}
+.terms div:last-child{border-bottom:0}
+.terms dt,.terms dd{margin:0;padding:6px 10px}
+.terms dt{background:var(--soft);font-weight:600}
+.uses{margin:6px 0;padding-left:20px;font-size:14px}
+.note{border-left:4px solid #D9A21B;background:#FBF0D3;color:#412402;padding:8px 14px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+.warn{border-left-color:var(--bad);background:#FBE3EA;color:#4A1B2C}
+@media (prefers-color-scheme:dark){.note{background:#3A3216;color:#F5E6B0}.warn{background:#3F1E2B;color:#FFD3DF}}
+details{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-weight:600;font-size:14px;color:var(--cell)}
+details .a{padding:4px 14px 10px;font-size:14px}
+.rel{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.rel button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 14px;font-size:13px}
+
+/* 표 */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft)}
+
+/* 퀴즈 */
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+.opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.opts button{text-align:left;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:15px}
+.opts button:hover{border-color:var(--accent)}
+.opts button.ok{background:rgba(30,142,90,.18);border-color:var(--ok)}
+.opts button.no{background:rgba(196,45,90,.16);border-color:var(--bad)}
+.fb{font-size:14px;color:var(--muted);margin-top:6px}
+.score{font-family:var(--font-mono);font-size:18px}
+.badge{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;padding:2px 14px;font-weight:600}
+
+/* 기초 개념 */
+.bases{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.bases span{width:38px;height:44px;border-radius:8px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:500;background:var(--card)}
+.bases .top{background:rgba(31,111,214,.15);border-color:var(--dna)}
+.bases .bot.ok{background:rgba(30,142,90,.2);border-color:var(--ok)}
+.bases .bot.empty{border-style:dashed;color:var(--muted)}
+.pick{display:flex;gap:8px;margin:8px 0}
+.pick button{width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:var(--soft);font-family:var(--font-mono);font-size:18px}
+.pick button:hover{border-color:var(--accent)}
+
+@keyframes dash{to{stroke-dashoffset:-12}}
+@keyframes drift{from{transform:translateX(-40px)}to{transform:translateX(60px)}}
+.flow{stroke-dasharray:6 6;animation:dash 1s linear infinite}
+.cloud{animation:drift 22s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){.flow,.cloud{animation:none}.drawer{transition:none}html{scroll-behavior:auto}}
+@media (max-width:640px){
+  .pin{padding:2px 3px 2px 3px;gap:0}
+  .pin span{display:none}
+  .terms div{grid-template-columns:1fr}
+  .brand b{font-size:18px}
+  .tabs{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<header class="bar"><div class="in">
+  <div class="brand"><small>기술·가정 · 생명공학기술</small><b>생명공학기술 <i>탐험</i></b></div>
+  <nav class="tabs" role="tablist" aria-label="화면 선택">
+    <button class="tab" role="tab" id="tab-home" data-tab="home">홈</button>
+    <button class="tab" role="tab" id="tab-basic" data-tab="basic">기초 개념</button>
+    <button class="tab" role="tab" id="tab-compare" data-tab="compare">개념 비교</button>
+    <button class="tab" role="tab" id="tab-quiz" data-tab="quiz">확인 퀴즈</button>
+    <button class="tab" role="tab" id="tab-inquiry" data-tab="inquiry">생각 더하기</button>
+  </nav>
+</div></header>
+
+<main>
+  <section class="view" id="view-home" role="tabpanel" aria-labelledby="tab-home">
+    <h2>바이오 시티 탐험</h2>
+    <p class="lead">번호 핀을 눌러 보세요. 16가지 생명공학기술의 원리가 단계별 그림으로 펼쳐져요.</p>
+    <div class="scene" id="scene"></div>
+    <div class="cats" id="cats"></div>
+    <h3 style="margin:18px 0 8px">다른 화면으로 가기</h3>
+    <div class="links" id="links"></div>
+  </section>
+  <section class="view" id="view-basic" role="tabpanel" aria-labelledby="tab-basic" hidden></section>
+  <section class="view" id="view-compare" role="tabpanel" aria-labelledby="tab-compare" hidden></section>
+  <section class="view" id="view-quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden></section>
+  <section class="view" id="view-inquiry" role="tabpanel" aria-labelledby="tab-inquiry" hidden></section>
+</main>
+
+<div class="veil" id="veil" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-title" hidden>
+  <div class="dhead" id="dhead">
+    <div class="t"><span class="cat-tag" id="d-cat"></span><h2 id="d-title"></h2><p id="d-sum"></p></div>
+    <button class="x" id="d-close" aria-label="닫기">✕</button>
+  </div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+
+<script src="js/core.js"></script>
+<script src="js/diagram.js"></script>
+<script src="js/data.js"></script>
+<script src="js/hub.js"></script>
+<script src="js/basic.js"></script>
+<script src="js/compare.js"></script>
+<script src="js/quiz.js"></script>
+<script>Core.start();</script>
+</body>
+</html>
