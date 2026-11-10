@@ -54,7 +54,7 @@ const Hub=(()=>{
     $('#cats').innerHTML=Object.keys(CATS).map(k=>`<div class="cat" data-cat="${k}"><h3>${CATS[k].name}</h3>${TECHS.filter(t=>t.cat===k).map(t=>`<button data-id="${t.id}"><b>${t.id}</b>${esc(t.name)}</button>`).join('')}</div>`).join('');
     $$('#cats button').forEach(b=>b.addEventListener('click',()=>go(+b.dataset.id)));
 
-    const LINKS=[['basic','기초 개념','세포 → 핵 → 염색체 → DNA → 유전자 → 게놈'],['compare','개념 비교','재조합·형질전환·세포융합·핵이식, CT와 MRI'],['quiz','확인 퀴즈','26문항, 바로 채점'],['inquiry','생각 더하기','토론하고 조사해 볼 질문']];
+    const LINKS=[['basic','기초 개념','세포 안을 확대해 유전자까지 살펴보고, 게놈이 무엇인지도 알아봐요'],['compare','개념 비교','재조합·형질전환·세포융합·핵이식, CT와 MRI'],['quiz','확인 퀴즈','26문항, 바로 채점'],['inquiry','생각 더하기','토론하고 조사해 볼 질문']];
     $('#links').innerHTML=LINKS.map(l=>`<button data-tab="${l[0]}"><b>${l[1]}</b><span>${l[2]}</span></button>`).join('');
     $$('#links button').forEach(b=>b.addEventListener('click',()=>Core.showTab(b.dataset.tab)));
 
